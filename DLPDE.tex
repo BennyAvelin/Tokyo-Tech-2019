@@ -1,4 +1,4 @@
-\documentclass[10pt,handout]{beamer}
+\documentclass[10pt]{beamer}
 % Preamble (fold)
 
 \usepackage[utf8x]{inputenc}
@@ -73,7 +73,7 @@
 	\begin{enumerate}
 		\item Motivation
 		\item Connection to PDE
-		\item Some results
+		\item Consequences
 	\end{enumerate}
 \end{frame}
 
@@ -119,13 +119,16 @@
 \begin{frame}{Risk and Hypothesis}
 	\begin{itemize}
 		\item Let us consider data $(x,y) \sim \mu$, where $x \in \mathbb{R}^n$ and $y \in \mathbb{R}^m$.
+		\pause
 		\item A hypothesis is a function $h: \mathbb{R}^n \to \mathbb{R}^m$,
+		\pause
 		\item A loss-function $L:\mathbb{R}^m \times \mathbb{R}^m \to \mathbb{R}_+$,
 		$$R(h) = \mathbb{E}_{\mu}\left[L(h(x),y)\right], \quad \textbf{Risk}$$
+		\pause
 		\item Given a data-set $D = \{(x_1,y_1), \ldots (x_N,y_N)\}$ which are sampled i.i.d. from $\mu$ we also define,
  	    $$R_{emp,D} (h) = \frac{1}{N}\sum_{i=1}^N \left[L(h(x_i),y_i)\right], \quad \textbf{Empirical Risk}$$
+		\pause
 		\item Call a set of hypothesis $\mathcal{H}$, the hypothesis space.
-		\item test
 	\end{itemize}
 \end{frame}
 
@@ -133,10 +136,10 @@
 	\begin{itemize}
 		\item Find $h^\ast \in \mathcal{H}$ such that,
 		$$R(h^\ast) = \min_{\mathcal{H}} R(h), \quad \textbf{Risk minimization}$$
-
+		\pause
 		\item We dont have access to $\mu$ but we have access to a given data-set $D$, we could try to find $h_D^\ast \in \mathcal{H}$ such that,
 		$$R_{emp,D}(h_D^\ast) = \min_{\mathcal{H}} R_{emp,D}(h)$$
-
+		\pause
 		\item We cannot find $h_D^\ast$ in general. Instead we try to find $h \in \mathcal{H}$ such that $R_{emp,D}(h)$ is as small as possible,
 		$$R_{emp,D}(h_D^\ast) \leq R_{emp,D}(h), \quad \textbf{Empirical Risk Min}$$
 	\end{itemize}
@@ -150,7 +153,9 @@
 		\item Let $\mathcal{H}$ be functions of the form
 		$$h(x) = \sum_{i=1}^M v_i \sigma (w_i \cdot x + b_i)$$
 		for paramters $v_i,w_i,b_i$. $\sigma(x) = \frac{1}{1+e^{-x}}$
-		\item Let the loss function be quadratic $L(x,y) = (x-y)^2$
+		\pause
+		\item Let the loss function be quadratic $L(y',y) = (y'-y)^2$
+		\pause
 		\item Goal: find $h^\ast_D$ that minimizes
 		$$
 			R_{emp,D} (h) = \frac{1}{N}\sum_{i=1}^N (h(x_i)-y_i)^2
@@ -179,14 +184,17 @@
 	$$
 		dW_t = -\nabla_W R_{emp,D}(h_{W_t})dt
 	$$
+	\pause
 	\begin{itemize}
 		\item $W$ is usually very high dimensional 1M and up for many problems
 		\item the size of $D$ is also quite big.
+		\pause
 		\item run the following discrete process instead
 	\end{itemize}
 	$$
 		\Delta W_i = -\nabla_W R_{emp,D_i}(h_{W_i})\Delta n
 	$$
+	\pause
 	\begin{itemize}
 		\item $D_i$ is a subsampled set of $D$ at each time step $i$, $\Delta n$ is step-length. 
 		\item Called Stochastic Gradient Descent (SGD), or Robins-Monro stochastic approximation.
@@ -199,11 +207,13 @@
 		$$
 			\Delta W_i = -\nabla_W R_{emp,D}(h_{W_i})\Delta n + (\nabla_W R_{emp,D}(h_{W_i})-\nabla_W R_{emp,D_i}(h_{W_i}))\Delta_n
 		$$
+		\pause
 		\item Identify this as a Euler-Maruyama scheme for the SDE
 		$$
 			dW_t = -\nabla_W R_{emp,D}(h_{W_t})dt + \sqrt{\Delta n \Sigma(W_t)} dB_t
 		$$
 	\end{itemize}
+	\pause
 	Observations
 	\begin{itemize}
 		\item If $\Delta n \to 0$ then we regain standard gradient flow.
@@ -231,6 +241,7 @@
 	    \frac{\partial \rho}{\partial t} = \nabla \cdot \left (\rho \nabla V + \frac{\sigma \alpha}{2}\nabla \rho \right ),
 	$$
 	Has the following stationary solution $$\rho = e^{-\frac{2}{\sigma \alpha} V}$$
+	\pause
 	\item Consider the transformation,
 	$$\rho_1 = e^{\frac{2}{\sigma \alpha} V } \rho,$$ 
 	\item Multiply by a compactly supported test function $\phi \in C_0^\infty$, no time dependence, then for $d \mu = e^{-\frac{2}{\sigma \alpha} V} dx$,
